@@ -9,8 +9,19 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.egco428.mutram.MainActivity">
 
-    <TextView
+    <SearchView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/searchView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true" >
+    </SearchView>
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/listView"
+        android:layout_below="@+id/searchView1"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="15dp" />
 </RelativeLayout>
