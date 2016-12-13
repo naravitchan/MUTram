@@ -4,21 +4,25 @@ package com.egco428.mutram;
  * Created by Benz on 10/31/2016.
  */
 public class DataList {
-    private long id;
     private String picture;
     private String message;
-    private String timestamp;
+    private String detail;
+    private String lat;
+    private String longitude;
 
-    public DataList(Long id, String message, String pic_name , String timestamp){
-        this.id = id;
+    public DataList( String message, String pic_name , String detail, String lat, String longitude ){
+
         this.picture = pic_name;
         this.message = message;
-        this.timestamp = timestamp;
+        this.detail = detail;
+        this.lat = lat;
+        this.longitude= longitude;
     }
     public String getPicName(){ return picture ; }
     public String getMessage(){ return message; }
-    public String getTimestamp(){ return timestamp; }
-    public long getId() {
-        return id;
-    }
+    public String getDetail(){ return detail; }
+    public String getLat() {return lat;}
+    public String getLongitude() {return longitude;}
+
+
 }

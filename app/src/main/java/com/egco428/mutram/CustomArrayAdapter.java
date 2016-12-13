@@ -37,7 +37,7 @@ public class CustomArrayAdapter extends ArrayAdapter<DataList>{
         txt.setText(dataList.getMessage());
 
         TextView time = (TextView)view.findViewById(R.id.details);
-        time.setText(dataList.getTimestamp());
+        time.setText(dataList.getDetail());
 
         ImageView image = (ImageView)view.findViewById(R.id.imageView);
         int res = context.getResources().getIdentifier(dataList.getPicName(),"drawable",context.getPackageName());

@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "56912050498",
+    "firebase_url": "https://mutram-6bd70.firebaseio.com",
+    "project_id": "mutram-6bd70",
+    "storage_bucket": "mutram-6bd70.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:56912050498:android:6180b720f3381207",
+        "android_client_info": {
+          "package_name": "com.egco428.mutram"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "56912050498-tr68ccj86uafprhfdqq8bb7dt63o5ijv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAwji9t_Hphr0A8Rz21M2wTKA5SHAXtQuc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
