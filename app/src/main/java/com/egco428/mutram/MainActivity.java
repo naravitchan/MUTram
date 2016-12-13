@@ -26,10 +26,10 @@ public class MainActivity extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
         listView= (ListView) findViewById(R.id.listView);
-
 //        dataSource = new DataSource(this);
 //        dataSource.open();
 //        values = dataSource.getAllFortune();
+        DataList dataList;
         customArrayAdapter = new CustomArrayAdapter(this, 0, values);
         listView.setAdapter(customArrayAdapter);
 //        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
