@@ -7,7 +7,8 @@
         android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:layout_height="120dp"
-        android:weightSum="1">
+        android:weightSum="1"
+        android:id="@+id/listLayout">
 
         <ImageView
             android:layout_width="115dp"

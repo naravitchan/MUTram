@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -26,6 +27,8 @@ public class CustomArrayAdapter extends ArrayAdapter<DataList>{
         this.objects = objects;
     }
 
+
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         DataList dataList = objects.get(position);
@@ -36,6 +39,15 @@ public class CustomArrayAdapter extends ArrayAdapter<DataList>{
         TextView txt = (TextView)view.findViewById(R.id.msgText);
         txt.setText(dataList.getMessage());
 
+        if (position % 2 == 1) {
+            view.setBackgroundResource(R.color.fis);
+        } else {
+            view.setBackgroundResource(R.color.tw);
+        }
+//        LinearLayout listLayout = (LinearLayout)view.findViewById(R.id.listLayout);
+//        listLayout.setBackgroundColor(Color.GREEN);
+
+
         TextView time = (TextView)view.findViewById(R.id.details);
         time.setText(dataList.getDetail());
 
@@ -45,4 +57,6 @@ public class CustomArrayAdapter extends ArrayAdapter<DataList>{
         return view;
 
     }
+
 }
+
