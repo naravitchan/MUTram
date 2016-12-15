@@ -118,14 +118,15 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
-        DatabaseReference ref = database.getReference("User");
-        DatabaseReference postsRef = ref.getParent();
-        DatabaseReference newPostRef = postsRef.push();
-//        DataList dataList = new DataList("benzza007","pic0","Top Supermarket, One Stop Service, Harmony","13.792069", "100.322207");
-//        newPostRef.setValue(dataList);
+//        DatabaseReference ref = database.getReference("User");
+//        DatabaseReference postsRef = ref.getParent();
+//        DatabaseReference newPostRef = postsRef.push();
 
-        mDatabase = FirebaseDatabase.getInstance().getReference();
 
+
+        mDatabase = FirebaseDatabase.getInstance().getReference("Location");
+//        DataList dataList = new DataList("seagame02","pic0","Top Supermarket, One Stop Service, Harmony","13.792069", "100.322207");
+//        mDatabase.push().setValue(dataList);
         ValueEventListener postListener = new ValueEventListener()  {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
@@ -187,7 +188,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void gotomap(View view) {
-        Intent intent = new Intent(MainActivity.this,Calculate.class);
+        Intent intent = new Intent(MainActivity.this,MapsActivity.class);
 //        intent.putExtra(name, object.getMessage());
 //        intent.putExtra(Latitude, object.getLat());
 //        intent.putExtra(Longitude, object.getLongitude());

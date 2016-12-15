@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">MUTram</string>
+    <string name="title_activity_maps">Map</string>
 </resources>
