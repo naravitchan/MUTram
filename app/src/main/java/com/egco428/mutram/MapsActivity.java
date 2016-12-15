@@ -10,7 +10,9 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -29,6 +31,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected LocationListener locationListener;
     TextView lblLat;
     TextView lblLon;
+    EditText name;
+    EditText detail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +44,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
         lblLat = (TextView) findViewById(R.id.lblLat);
         lblLon = (TextView) findViewById(R.id.lblLon);
+        name = (EditText)findViewById(R.id.nameT);
+        detail = (EditText)findViewById(R.id.detailT);
+
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
@@ -89,9 +96,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public void AddLaLo(View view) {
-        DatabaseReference ref = database.getReference("User");
-        DatabaseReference postsRef = ref.getParent();
-        DatabaseReference newPostRef = postsRef.push();
+        String lat= lblLat.getText().toString();
+        String longi = lblLon.getText().toString();
+        String nameLoc = name.getText().toString();
+        String detailLoc = detail.getText().toString();
+
+        DatabaseReference ref = database.getReference("Location");
+        ref.push().setValue(new DataList(nameLoc,"pic0",detailLoc,lat,longi));
+        Toast.makeText(this,"added to firebase already",Toast.LENGTH_SHORT).show();
+//        DatabaseReference postsRef = ref.getParent();
+//        DatabaseReference newPostRef = postsRef.push();
 //        String d
 //        newPostRef.setValue(dataList);
     }

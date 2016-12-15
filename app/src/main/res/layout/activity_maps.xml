@@ -33,15 +33,22 @@ android:orientation="vertical"
 
     <EditText
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/nameT"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="0.53" />
+
+    <EditText
+        android:layout_width="match_parent"
         android:layout_height="65dp"
-        android:id="@+id/editText"
+        android:id="@+id/detailT"
         android:textSize="15dp" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="60dp"
-        android:text="RANDOM"
-        android:id="@+id/randomBtn"
+        android:text="ADD"
+        android:id="@+id/addBtn"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:onClick="AddLaLo" />

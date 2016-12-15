@@ -52,7 +52,7 @@ public class CustomArrayAdapter extends ArrayAdapter<DataList>{
         time.setText(dataList.getDetail());
 
         ImageView image = (ImageView)view.findViewById(R.id.imageView);
-        int res = context.getResources().getIdentifier(dataList.getPicName(),"drawable",context.getPackageName());
+       int res = context.getResources().getIdentifier(dataList.getPicName(),"drawable",context.getPackageName());
         image.setImageResource(res);
         return view;
 
