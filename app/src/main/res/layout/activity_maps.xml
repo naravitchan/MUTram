@@ -36,13 +36,23 @@ android:orientation="vertical"
         android:layout_height="wrap_content"
         android:id="@+id/nameT"
         android:layout_gravity="center_horizontal"
-        android:layout_weight="0.53" />
+        android:layout_weight="0.53"
+        android:text="Title" />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="65dp"
         android:id="@+id/detailT"
-        android:textSize="15dp" />
+        android:textSize="15dp"
+        android:text="detail" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/stationT"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="0.53"
+        android:text="1" />
 
     <Button
         android:layout_width="wrap_content"
