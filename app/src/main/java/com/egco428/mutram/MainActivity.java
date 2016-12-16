@@ -168,8 +168,9 @@ public class MainActivity extends AppCompatActivity {
             String detail = (String)singleUser.get("detail");
             String lat = (String)singleUser.get("lat");
             String longitude = (String)singleUser.get("longitude");
+            String station = (String)singleUser.get("station");
 
-            arrayData.add(new DataList(nameUser,password,detail,lat,longitude));
+            arrayData.add(new DataList(nameUser,password,detail,lat,longitude,station));
         }
         if(arrayData.size()>0){
             customArrayAdapter = new CustomArrayAdapter(this, 0, arrayData);

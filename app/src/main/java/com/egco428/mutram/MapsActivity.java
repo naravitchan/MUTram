@@ -39,6 +39,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     TextView lblLon;
     EditText name;
     EditText detail;
+    EditText station;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +53,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         lblLon = (TextView) findViewById(R.id.lblLon);
         name = (EditText)findViewById(R.id.nameT);
         detail = (EditText)findViewById(R.id.detailT);
+        station = (EditText)findViewById(R.id.stationT);
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -82,8 +84,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onLocationChanged(Location location) {
         //location.getLatitude()
         //location.getLongitude()
-        lblLat.setText("Latitude : " + location.getLatitude());
-        lblLon.setText("Longitude : " + location.getLongitude());
+        lblLat.setText("" + location.getLatitude()); //Latitude :
+        lblLon.setText("" + location.getLongitude()); //Longitude :
         Log.e("LatLon","Latitude : " + location.getLatitude()+"Longitude : " + location.getLongitude());
     }
 
@@ -107,9 +109,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         String longi = lblLon.getText().toString();
         String nameLoc = name.getText().toString();
         String detailLoc = detail.getText().toString();
+        String stationLoc = station.getText().toString();
 
         DatabaseReference ref = database.getReference("Location");
-        ref.push().setValue(new DataList(nameLoc,"pic0",detailLoc,lat,longi));
+        ref.push().setValue(new DataList(nameLoc,"pic0",detailLoc,lat,longi,stationLoc));
         Toast.makeText(this,"added to firebase already",Toast.LENGTH_SHORT).show();
 //        DatabaseReference postsRef = ref.getParent();
 //        DatabaseReference newPostRef = postsRef.push();
