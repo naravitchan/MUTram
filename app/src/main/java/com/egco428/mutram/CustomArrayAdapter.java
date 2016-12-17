@@ -37,7 +37,13 @@ public class CustomArrayAdapter extends ArrayAdapter<DataList>{
         view.setBackgroundColor(Color.WHITE);
 
         TextView txt = (TextView)view.findViewById(R.id.msgText);
-        txt.setText(dataList.getMessage());
+        if(dataList.getBoolean()==false){
+            txt.setText(dataList.getMessage());
+        }
+        else if(dataList.getBoolean()== true){
+
+        }
+
 
         if (position % 2 == 1) {
             view.setBackgroundResource(R.color.fis);
@@ -47,6 +53,15 @@ public class CustomArrayAdapter extends ArrayAdapter<DataList>{
 //        LinearLayout listLayout = (LinearLayout)view.findViewById(R.id.listLayout);
 //        listLayout.setBackgroundColor(Color.GREEN);
 
+        if(txt.getText().equals("red line")){
+            view.setBackgroundResource(R.color.red);
+        }
+        else if(txt.getText().equals("blue line")){
+            view.setBackgroundResource(R.color.blue);
+        }
+        else if(txt.getText().equals("green line")){
+            view.setBackgroundResource(R.color.green);
+        }
 
         TextView time = (TextView)view.findViewById(R.id.details);
         time.setText(dataList.getDetail());

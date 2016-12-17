@@ -76,6 +76,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         LatLng sydney = new LatLng(-34, 151);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+
     }
 
 
@@ -111,8 +112,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         String detailLoc = detail.getText().toString();
         String stationLoc = station.getText().toString();
 
+
         DatabaseReference ref = database.getReference("Location");
-        ref.push().setValue(new DataList(nameLoc,"pic0",detailLoc,lat,longi,stationLoc));
+        ref.push().setValue(new DataList(nameLoc,"pic0",detailLoc,lat,longi,stationLoc,false,"","",""));
         Toast.makeText(this,"added to firebase already",Toast.LENGTH_SHORT).show();
 //        DatabaseReference postsRef = ref.getParent();
 //        DatabaseReference newPostRef = postsRef.push();

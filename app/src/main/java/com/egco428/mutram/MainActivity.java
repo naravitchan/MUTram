@@ -1,13 +1,10 @@
 package com.egco428.mutram;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,9 +12,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -37,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
     ListView listView;
     public static final String Latitude = "latitude";
     public static final String Longitude = "longitude";
-    public static final String name = "name";
+    public static final String Station = "name";
 
     final FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference mDatabase;
@@ -88,13 +83,6 @@ public class MainActivity extends AppCompatActivity {
                     for(int i=0;i<arrayData.size();i++){
                         DataList object = (DataList)arrayData.get(i);
                         String search = object.getMessage();
-//                        String nameUser = (String)singleUser.get("message");
-//                        String password = (String)singleUser.get("picName");
-//                        String detail = (String)singleUser.get("detail");
-//                        String lat = (String)singleUser.get("lat");
-//                        String longitude = (String)singleUser.get("longitude");
-
-//                        arrayData.add(new DataList(nameUser,password,detail,lat,longitude));
                         if(search.contains(newText)){
                             arrayDataSearch.add(object);
                             Log.e("search",object.getMessage());}
@@ -102,10 +90,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                     customArrayAdapter = new CustomArrayAdapter(MainActivity.this, 0, arrayDataSearch);
                     listView.setAdapter(customArrayAdapter);
-
-//                    ArrayAdapter adapter = new ArrayAdapter(MainActivity.this,android.R.layout.simple_list_item_1,arrayDataSearch);
-//                    listView.setAdapter(adapter);
-
                 }
                 else{
                     //if search text is null
@@ -115,18 +99,25 @@ public class MainActivity extends AppCompatActivity {
                 }
                 return true;
             }
-
         });
 
 //        DatabaseReference ref = database.getReference("User");
 //        DatabaseReference postsRef = ref.getParent();
 //        DatabaseReference newPostRef = postsRef.push();
 
+//        mDatabase = FirebaseDatabase.getInstance().getReference("Tram").child("red line");
+//         DataList dataList = new DataList("IC","pic0","Top Supermarket, One Stop Service, Harmony","13.792069", "100.322207","34");
+//        mDatabase.push().setValue(dataList);
 
+//        mDatabase = FirebaseDatabase.getInstance().getReference("Tram").child("blue line");
+//        DataList dataList2 = new DataList("mlc","pic0","Top Supermarket, One Stop Service, Harmony","13.792069", "100.322207","34");
+//        mDatabase.push().setValue(dataList2);
+//
+//        mDatabase = FirebaseDatabase.getInstance().getReference("Tram").child("green line");
+//        DataList dataList3 = new DataList("mlc","pic0","Top Supermarket, One Stop Service, Harmony","13.792069", "100.322207","34");
+//        mDatabase.push().setValue(dataList3);
 
         mDatabase = FirebaseDatabase.getInstance().getReference("Location");
-//        DataList dataList = new DataList("seagame02","pic0","Top Supermarket, One Stop Service, Harmony","13.792069", "100.322207");
-//        mDatabase.push().setValue(dataList);
         ValueEventListener postListener = new ValueEventListener()  {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
@@ -142,14 +133,15 @@ public class MainActivity extends AppCompatActivity {
         };
         mDatabase.addValueEventListener(postListener);
 
+
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
 
                 DataList object = (DataList) arrayData.get(position);
 
-                Intent intent = new Intent(MainActivity.this,Calculate.class);
-                intent.putExtra(name, object.getMessage());
+                Intent intent = new Intent(MainActivity.this,Tram_detail.class);
+                intent.putExtra(Station, object.getMessage());
                 intent.putExtra(Latitude, object.getLat());
                 intent.putExtra(Longitude, object.getLongitude());
                 startActivity(intent);
@@ -169,8 +161,12 @@ public class MainActivity extends AppCompatActivity {
             String lat = (String)singleUser.get("lat");
             String longitude = (String)singleUser.get("longitude");
             String station = (String)singleUser.get("station");
+            String red = (String) singleUser.get("redtime");
+            String blue = (String) singleUser.get("bluetime");
+            String green = (String) singleUser.get("greentime");
 
-            arrayData.add(new DataList(nameUser,password,detail,lat,longitude,station));
+
+            arrayData.add(new DataList(nameUser,password,detail,lat,longitude,station,false,red,blue,green));
         }
         if(arrayData.size()>0){
             customArrayAdapter = new CustomArrayAdapter(this, 0, arrayData);
@@ -190,9 +186,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void gotomap(View view) {
         Intent intent = new Intent(MainActivity.this,MapsActivity.class);
-//        intent.putExtra(name, object.getMessage());
-//        intent.putExtra(Latitude, object.getLat());
-//        intent.putExtra(Longitude, object.getLongitude());
         startActivity(intent);
     }
 }
