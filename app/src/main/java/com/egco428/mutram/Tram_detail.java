@@ -30,8 +30,10 @@ import java.util.Map;
 public class Tram_detail extends AppCompatActivity implements android.location.LocationListener {
     ListView listView;
     private DatabaseReference mDatabase;
+
     protected LocationManager locationManager;
     protected android.location.LocationListener locationListener;
+
     String lat;
     String longitude_main;
     String name_loc;
@@ -121,7 +123,7 @@ public class Tram_detail extends AppCompatActivity implements android.location.L
     }
 
     private void calculateDistance(){
-        location.getLongitude();
+
     }
 
     @Override
@@ -133,17 +135,11 @@ public class Tram_detail extends AppCompatActivity implements android.location.L
     }
 
     @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-
-    }
+    public void onStatusChanged(String provider, int status, Bundle extras) {}
 
     @Override
-    public void onProviderEnabled(String provider) {
-
-    }
+    public void onProviderEnabled(String provider) {}
 
     @Override
-    public void onProviderDisabled(String provider) {
-
-    }
+    public void onProviderDisabled(String provider) {}
 }
