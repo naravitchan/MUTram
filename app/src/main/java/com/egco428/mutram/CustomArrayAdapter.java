@@ -44,7 +44,7 @@ public class CustomArrayAdapter extends ArrayAdapter<DataList>{
         TextView time = (TextView)view.findViewById(R.id.details);
         TextView txt = (TextView)view.findViewById(R.id.msgText);
         txt.setText(dataList.getMessage());
-            time.setText(dataList.getDetail());
+            time.setText(dataList.getDetail()+"\n"+"station : "+dataList.getStation());
 
 
 
