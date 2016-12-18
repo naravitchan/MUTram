@@ -37,7 +37,7 @@ public class CustomArrayAdapterTram extends ArrayAdapter<DataList>{
         TextView time = (TextView)view.findViewById(R.id.detailtram);
         TextView txt = (TextView)view.findViewById(R.id.tramline);
         txt.setText(dataList.getDetail());
-//        time.setText(dataList.getMessage());
+        time.setText(dataList.getMessage());
 
         if(txt.getText().equals("Red Tram")){
             view.setBackgroundResource(R.color.red);

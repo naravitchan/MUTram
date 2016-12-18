@@ -33,10 +33,11 @@ public class MainActivity extends AppCompatActivity {
     public static final String Latitude = "latitude";
     public static final String Longitude = "longitude";
     public static final String Station = "name";
+    public static final String Station2 = "station";
 
     final FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference mDatabase;
-    List<DataList> arrayData = new ArrayList<>();
+    public static List<DataList> arrayData = new ArrayList<>();
 
 
 
@@ -101,22 +102,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-//        DatabaseReference ref = database.getReference("User");
-//        DatabaseReference postsRef = ref.getParent();
-//        DatabaseReference newPostRef = postsRef.push();
-
-//        mDatabase = FirebaseDatabase.getInstance().getReference("Tram").child("red line");
-//         DataList dataList = new DataList("IC","pic0","Top Supermarket, One Stop Service, Harmony","13.792069", "100.322207","34");
-//        mDatabase.push().setValue(dataList);
-
-//        mDatabase = FirebaseDatabase.getInstance().getReference("Tram").child("blue line");
-//        DataList dataList2 = new DataList("mlc","pic0","Top Supermarket, One Stop Service, Harmony","13.792069", "100.322207","34");
-//        mDatabase.push().setValue(dataList2);
-//
-//        mDatabase = FirebaseDatabase.getInstance().getReference("Tram").child("green line");
-//        DataList dataList3 = new DataList("mlc","pic0","Top Supermarket, One Stop Service, Harmony","13.792069", "100.322207","34");
-//        mDatabase.push().setValue(dataList3);
-
         mDatabase = FirebaseDatabase.getInstance().getReference("Location");
         ValueEventListener postListener = new ValueEventListener()  {
             @Override
@@ -142,8 +127,7 @@ public class MainActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(MainActivity.this,Tram_detail.class);
                 intent.putExtra(Station, object.getMessage());
-                intent.putExtra(Latitude, object.getLat());
-                intent.putExtra(Longitude, object.getLongitude());
+                intent.putExtra(Station2, object.getStation());
                 startActivity(intent);
             }
         });
@@ -151,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void retriveData(Map<String, Object> value) {
-
+        if(arrayData.size()<=0){
         for (Map.Entry<String, Object> entry : value.entrySet())
         {
             Map singleUser = (Map) entry.getValue();
@@ -167,6 +151,7 @@ public class MainActivity extends AppCompatActivity {
 
 
             arrayData.add(new DataList(nameUser,password,detail,lat,longitude,station,false,red,blue,green));
+        }
         }
         if(arrayData.size()>0){
             customArrayAdapter = new CustomArrayAdapter(this, 0, arrayData);
@@ -188,5 +173,6 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(MainActivity.this,MapsActivity.class);
         startActivity(intent);
     }
+
 }
 
