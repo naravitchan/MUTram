@@ -52,8 +52,8 @@ public class CustomArrayAdapterTram extends ArrayAdapter<DataList>{
         }
 
 
-        ImageView image = (ImageView)view.findViewById(R.id.trampic);
-       int res = context.getResources().getIdentifier(dataList.getPicName(),"drawable",context.getPackageName());
+        ImageView image = (ImageView)view.findViewById(R.id.imageView);
+       int res = context.getResources().getIdentifier("pic"+dataList.getStation(),"drawable",context.getPackageName());
         image.setImageResource(res);
         return view;
 

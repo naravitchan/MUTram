@@ -55,6 +55,11 @@ public class Tram_detail extends AppCompatActivity implements android.location.L
         name = intent.getStringExtra("name");
         station = intent.getStringExtra("station");
         listView = (ListView) findViewById(R.id.listView2);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
@@ -141,7 +146,6 @@ public class Tram_detail extends AppCompatActivity implements android.location.L
             String station = object.getStation();
             if((stationgreen.equals(station))||(stationblue.equals(station))||(stationred.equals(station))) {
                 String title = object.getMessage();
-                String picname = object.getPicName();
                 String lat = object.getLat();
                 String longi = object.getLongitude();
                 String greentime = object.getGreentime();
@@ -149,15 +153,15 @@ public class Tram_detail extends AppCompatActivity implements android.location.L
                 String bluetime = object.getBluetime();
                 if (stationgreen.equals(station)) {
                     Log.v("add best green station ", station + " end " + station);
-                    arrayData.add(new DataList(title, picname, "Green Tram", lat, longi, station, redtime, bluetime, greentime));
+                    arrayData.add(new DataList(title, "Green Tram", lat, longi, station, redtime, bluetime, greentime));
                 }
                 if (stationblue.equals(station)) {
                     Log.v("add best blue station ", station + " end " + station);
-                    arrayData.add(new DataList(title, picname, "Blue Tram", lat, longi, station, redtime, bluetime, greentime));
+                    arrayData.add(new DataList(title, "Blue Tram", lat, longi, station, redtime, bluetime, greentime));
                 }
                 if (stationred.equals(station)) {
                     Log.v("add best red station ", station + " end " + station);
-                    arrayData.add(new DataList(title, picname, "Red Tram", lat, longi, station, redtime, bluetime, greentime));
+                    arrayData.add(new DataList(title, "Red Tram", lat, longi, station, redtime, bluetime, greentime));
                 }
             }
 
