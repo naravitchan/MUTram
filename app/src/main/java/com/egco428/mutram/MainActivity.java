@@ -83,10 +83,13 @@ public class MainActivity extends AppCompatActivity {
                     List<DataList> arrayDataSearch = new ArrayList<>();
                     for(int i=0;i<arrayData.size();i++){
                         DataList object = (DataList)arrayData.get(i);
-                        String search = object.getMessage();
-                        if(search.contains(newText)){
+                        String newtext2=newText.toLowerCase();
+                        String search = object.getMessage().toLowerCase();
+                        String search2 = object.getDetail().toLowerCase();
+                        if(search.contains(newtext2)||search2.contains(newtext2)){
                             arrayDataSearch.add(object);
-                            Log.e("search",object.getMessage());}
+                            Log.e("search",object.getMessage());
+                        }
 
                     }
                     customArrayAdapter = new CustomArrayAdapter(MainActivity.this, 0, arrayDataSearch);
@@ -150,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
             String green = (String) singleUser.get("greentime");
 
 
-            arrayData.add(new DataList(nameUser,password,detail,lat,longitude,station,false,red,blue,green));
+            arrayData.add(new DataList(nameUser,password,detail,lat,longitude,station,red,blue,green));
         }
         }
         if(arrayData.size()>0){

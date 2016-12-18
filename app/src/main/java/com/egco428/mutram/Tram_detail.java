@@ -85,7 +85,7 @@ public class Tram_detail extends AppCompatActivity implements android.location.L
 
                 DataList object = (DataList) arrayData.get(position);
 
-                Intent intent = new Intent(Tram_detail.this,Tram_detail.class);
+                Intent intent = new Intent(Tram_detail.this,TramMapsActivity.class);
                 intent.putExtra(Station, name);
                 intent.putExtra(Station2, station);
                 intent.putExtra(Station3, object.getStation());
@@ -117,49 +117,47 @@ public class Tram_detail extends AppCompatActivity implements android.location.L
             Double longitu=Double.parseDouble(object.getLongitude());
             Double latitude=Double.parseDouble(object.getLat());
             Double distance = distance(Latitude,Longitude,latitude,longitu);
-            if((!object.getGreen().equals(""))&&(distance<mingreen)){
+            if((!object.getGreentime().equals("")||(!object.getBluetime().equals(null)))&&(distance<mingreen)){
 //                Log.v("min green disc ", distance + " and station " + station);
                 mingreen=distance;
                 stationgreen=station;
             }
-            if((!object.getRed().equals(""))&&(distance<minred)){
+            if((!object.getRedtime().equals("")||(!object.getBluetime().equals(null)))&&(distance<minred)){
 //                Log.v("min red disc ", distance + " and station " + station);
                 minred=distance;
                 stationred=station;
             }
-            if((!object.getBlue().equals(""))&&(distance<minblue)){
+            if((!object.getBluetime().equals("")||(!object.getBluetime().equals(null)))&&(distance<minblue)){
 //                Log.v("min blue disc ", distance + " and station " + station);
                 minblue=distance;
                 stationblue=station;
             }
-
 
         }
 
 
         for(int i=0;i<arrayCal.size();i++){
             DataList object = (DataList)arrayCal.get(i);
-
             String station = object.getStation();
             if((stationgreen.equals(station))||(stationblue.equals(station))||(stationred.equals(station))) {
                 String title = object.getMessage();
                 String picname = object.getPicName();
                 String lat = object.getLat();
                 String longi = object.getLongitude();
-                String greentime = object.getGreen();
-                String redtime = object.getRed();
-                String bluetime = object.getBlue();
+                String greentime = object.getGreentime();
+                String redtime = object.getRedtime();
+                String bluetime = object.getBluetime();
                 if (stationgreen.equals(station)) {
                     Log.v("add best green station ", station + " end " + station);
-                    arrayData.add(new DataList(title, picname, "Green Tram", lat, longi, station, true, redtime, bluetime, greentime));
+                    arrayData.add(new DataList(title, picname, "Green Tram", lat, longi, station, redtime, bluetime, greentime));
                 }
                 if (stationblue.equals(station)) {
                     Log.v("add best blue station ", station + " end " + station);
-                    arrayData.add(new DataList(title, picname, "Blue Tram", lat, longi, station, true, redtime, bluetime, greentime));
+                    arrayData.add(new DataList(title, picname, "Blue Tram", lat, longi, station, redtime, bluetime, greentime));
                 }
                 if (stationred.equals(station)) {
                     Log.v("add best red station ", station + " end " + station);
-                    arrayData.add(new DataList(title, picname, "Red Tram", lat, longi, station, true, redtime, bluetime, greentime));
+                    arrayData.add(new DataList(title, picname, "Red Tram", lat, longi, station, redtime, bluetime, greentime));
                 }
             }
 

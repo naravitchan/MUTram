@@ -43,8 +43,8 @@ public class CustomArrayAdapter extends ArrayAdapter<DataList>{
         view.setBackgroundColor(Color.WHITE);
         TextView time = (TextView)view.findViewById(R.id.details);
         TextView txt = (TextView)view.findViewById(R.id.msgText);
-        txt.setText(dataList.getDetail());
-            time.setText(dataList.getMessage());
+        txt.setText(dataList.getMessage());
+            time.setText(dataList.getDetail());
 
 
 
