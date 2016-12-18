@@ -56,7 +56,7 @@ public class CustomArrayAdapter extends ArrayAdapter<DataList>{
 
 
         ImageView image = (ImageView)view.findViewById(R.id.imageView);
-       int res = context.getResources().getIdentifier("pic"+dataList.getStation(),"drawable",context.getPackageName());
+        int res = context.getResources().getIdentifier("pic"+dataList.getStation(),"drawable",context.getPackageName());
         image.setImageResource(res);
         return view;
 
