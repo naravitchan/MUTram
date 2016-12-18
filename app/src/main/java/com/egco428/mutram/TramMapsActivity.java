@@ -9,8 +9,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -25,14 +25,14 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.List;
 
-public class TramMapsActivity extends AppCompatActivity implements OnMapReadyCallback,android.location.LocationListener {
+public class TramMapsActivity extends AppCompatActivity implements OnMapReadyCallback, android.location.LocationListener {
     protected LocationManager locationManager;
     protected android.location.LocationListener locationListener;
     private GoogleMap mMap;
     LatLng now;
     Marker usermarker;
-    Double longitu=LoadScreen.longitudeknow; //user
-    Double latitude=LoadScreen.latitudeknow; //user
+    Double longitu = LoadScreen.longitudeknow; //user
+    Double latitude = LoadScreen.latitudeknow; //user
     Double longitu2; //destination
     Double latitude2; //destination
     Double longitu3; //src
@@ -46,30 +46,32 @@ public class TramMapsActivity extends AppCompatActivity implements OnMapReadyCal
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tram_maps);
-
         Intent intent = getIntent();
         String name = intent.getStringExtra("name"); //destination name
         String stationdsc = intent.getStringExtra("station"); //station number
         String stationsrc = intent.getStringExtra("stationsrc");
+        String namesrc = intent.getStringExtra("namesrc");
+        String timesrc = intent.getStringExtra("time");
+        namesrc = namesrc.substring(0, namesrc.length() - 15);
         List<DataList> arrayData = MainActivity.arrayData;
-//        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        dis = (TextView)findViewById(R.id.textView);
-        time = (TextView)findViewById(R.id.textView2);
-        des = (TextView)findViewById(R.id.textView3);
+        dis = (TextView) findViewById(R.id.textView);
+        dis.setText(namesrc);
+        time = (TextView) findViewById(R.id.textView2);
+        time.setText(timesrc);
+        des = (TextView) findViewById(R.id.textView3);
+        des.setText(name);
 
-        for(int i=0;i<arrayData.size();i++){
-            DataList object = (DataList)arrayData.get(i);
+        for (int i = 0; i < arrayData.size(); i++) {
+            DataList object = (DataList) arrayData.get(i);
             String station = object.getStation();
-            if(station.equals(stationdsc)){
-                longitu2=Double.parseDouble(object.getLongitude()); // find location destination station
-                latitude2=Double.parseDouble(object.getLat());
+            if (station.equals(stationdsc)) {
+                longitu2 = Double.parseDouble(object.getLongitude()); // find location destination station
+                latitude2 = Double.parseDouble(object.getLat());
             }
-            if(station.equals(stationsrc)){
-                longitu3=Double.parseDouble(object.getLongitude()); // find location src station
-                latitude3=Double.parseDouble(object.getLat());
+            if (station.equals(stationsrc)) {
+                longitu3 = Double.parseDouble(object.getLongitude()); // find location src station
+                latitude3 = Double.parseDouble(object.getLat());
             }
         }
 
@@ -107,12 +109,13 @@ public class TramMapsActivity extends AppCompatActivity implements OnMapReadyCal
         }
 //        mMap.setMyLocationEnabled(true);
 //
-//        BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.mipmap.ic_launcher);
-//        usermarker = mMap.addMarker(new MarkerOptions()
-//                .position(new LatLng(latitude, longitu))
-//                .icon(icon)
-//                .title("User")
-//                .snippet("content"));
+        BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.mipmap.human);
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(now, 18));
+        usermarker = mMap.addMarker(new MarkerOptions()
+                .position(new LatLng(latitude, longitu))
+                .icon(icon)
+                .title("User")
+                .snippet("content"));
         Marker markerdes = mMap.addMarker(new MarkerOptions()
                 .position(new LatLng(latitude2, longitu2))
                 .icon(BitmapDescriptorFactory.fromResource(R.mipmap.endpin))
@@ -123,32 +126,25 @@ public class TramMapsActivity extends AppCompatActivity implements OnMapReadyCal
                 .icon(BitmapDescriptorFactory.fromResource(R.mipmap.startpin))
                 .title("Start Station")
                 .snippet("content"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(now,18));
 
     }
 
     @Override
-    public void onLocationChanged(Location location) {
-        if (location != null) {
-            if(usermarker!=null){
-            usermarker.remove();}
-            latitude=location.getLatitude();
-            longitu=location.getLongitude();
+    public void onLocationChanged(Location location) {        if (location != null) {
+
+            if (usermarker != null) {
+                usermarker.remove();
+            }
+            latitude = location.getLatitude();
+            longitu = location.getLongitude();
             Log.v("Trammap--LocaChanged ", latitude + " and lo" + longitu);
             if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
 
                 return;
             }
             usermarker = mMap.addMarker(new MarkerOptions()
                     .position(new LatLng(latitude, longitu))
-                    .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_launcher))
+                    .icon(BitmapDescriptorFactory.fromResource(R.mipmap.human))
                     .title("User")
                     .snippet("content"));
         }
@@ -160,10 +156,13 @@ public class TramMapsActivity extends AppCompatActivity implements OnMapReadyCal
     }
 
     @Override
-    public void onProviderEnabled(String provider) {}
+    public void onProviderEnabled(String provider) {
+    }
 
     @Override
-    public void onProviderDisabled(String provider) {}
+    public void onProviderDisabled(String provider) {
+    }
+
     public void onResume() {
         super.onResume();
     }
@@ -171,5 +170,27 @@ public class TramMapsActivity extends AppCompatActivity implements OnMapReadyCal
     public void onPause() {
         super.onPause();
     }
-    public void maprefesh(){}
+
+    public void maprefesh() {
+    }
+
+    public void movecam(View view) {
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitu), 18));
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        locationManager.removeUpdates(this);
+        super.onDestroy();
+    }
 }
