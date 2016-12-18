@@ -114,12 +114,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
         DatabaseReference ref = database.getReference("Location");
-        ref.push().setValue(new DataList(nameLoc,"pic0",detailLoc,lat,longi,stationLoc,false,"","",""));
+        ref.push().setValue(new DataList(nameLoc,"pic0",detailLoc,lat,longi,stationLoc,"","",""));
         Toast.makeText(this,"added to firebase already",Toast.LENGTH_SHORT).show();
-//        DatabaseReference postsRef = ref.getParent();
-//        DatabaseReference newPostRef = postsRef.push();
-//        String d
-//        newPostRef.setValue(dataList);
     }
 
 }

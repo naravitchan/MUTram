@@ -14,7 +14,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.google.android.gms.games.leaderboard.Leaderboards;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -31,57 +30,44 @@ public class MainActivity extends AppCompatActivity {
     MaterialSearchView searchView;
     protected List<DataList> values = new ArrayList<>();
     ListView listView;
+    public static final String Latitude = "latitude";
+    public static final String Longitude = "longitude";
+    public static final String Station = "name";
+    public static final String Station2 = "station";
 
+    final FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference mDatabase;
     public static List<DataList> arrayData = new ArrayList<>();
-//    public static List<DataList> arrayData ;
-//    List<DataList> arrayData;
-    private static final String TAG = "NextActivity";
+
+
+
+    private String time="31-Oct-2016 5.30 p.m.";
+    public static final int DETAIL_REQ_CODE = 1001;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
-        listView = (ListView) findViewById(R.id.listView);
+        listView= (ListView) findViewById(R.id.listView);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Location Search");
         toolbar.setTitleTextColor(Color.parseColor("#FFFFFF"));
-        searchView = (MaterialSearchView) findViewById(R.id.search_view);
-
-        //arrayData=LoadScreen.arrayData;
-//        arrayData = Singleton.getInstance().getList();
-//        for (DataList s : arrayData) {
-//            Log.d(TAG, "List from Singleton: " + s);
-//        }
-//        if (arrayData.size() > 0) {
-//            customArrayAdapter = new CustomArrayAdapter(MainActivity.this, 0, arrayData);
-//            listView.setAdapter(customArrayAdapter);
-//        }
-
-
-        //Log.e("arraydatasize Main",arrayData.size()+"");
-
-        mDatabase = FirebaseDatabase.getInstance().getReference("Location");
-        mDatabase.addListenerForSingleValueEvent(new ValueEventListener(){
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                retriveData((Map<String,Object>) snapshot.getValue());
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-        });
+        searchView = (MaterialSearchView)findViewById(R.id.search_view);
 
         searchView.setOnSearchViewListener(new MaterialSearchView.SearchViewListener() {
             @Override
             public void onSearchViewShown() {
+
             }
 
             @Override
             public void onSearchViewClosed() {
-//                listView.setAdapter(customArrayAdapter);
+
+                //If closed Search View , lstView will return default
+                listView.setAdapter(customArrayAdapter);
+
             }
         });
 
@@ -93,39 +79,58 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                if (newText != null && !newText.isEmpty()) {
-                    Log.e("arraydatasize search", arrayData.size() + "");
+                if(newText != null && !newText.isEmpty()){
                     List<DataList> arrayDataSearch = new ArrayList<>();
-                    for (int i = 0; i < arrayData.size(); i++) {
-                        DataList object = (DataList) arrayData.get(i);
-                        String search = object.getMessage();
-                        if (search.contains(newText)) {
+                    for(int i=0;i<arrayData.size();i++){
+                        DataList object = (DataList)arrayData.get(i);
+                        String newtext2=newText.toLowerCase();
+                        String search = object.getMessage().toLowerCase();
+                        String search2 = object.getDetail().toLowerCase();
+                        if(search.contains(newtext2)||search2.contains(newtext2)){
                             arrayDataSearch.add(object);
-                            Log.e("search", object.getMessage());
+                            Log.e("search",object.getMessage());
                         }
+
                     }
                     customArrayAdapter = new CustomArrayAdapter(MainActivity.this, 0, arrayDataSearch);
                     listView.setAdapter(customArrayAdapter);
-                } else {
+                }
+                else{
                     //if search text is null
                     //return default
-                    Log.e("arraydatasize else1", arrayData.size() + "");
                     customArrayAdapter = new CustomArrayAdapter(MainActivity.this, 0, arrayData);
                     listView.setAdapter(customArrayAdapter);
-                    Log.e("arraydatasize else2", arrayData.size() + "");
                 }
                 return true;
             }
         });
 
-//        mDatabase = FirebaseDatabase.getInstance().getReference("Tram").child("green line");
-//        DataList dataList3 = new DataList("mlc","pic0","Top Supermarket, One Stop Service, Harmony","13.792069", "100.322207","34");
-//        mDatabase.push().setValue(dataList3);
+        mDatabase = FirebaseDatabase.getInstance().getReference("Location");
+        ValueEventListener postListener = new ValueEventListener()  {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                retriveData((Map<String,Object>) snapshot.getValue());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Getting Post failed, log a message
+
+                // ...
+            }
+        };
+        mDatabase.addValueEventListener(postListener);
+
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
+
+                DataList object = (DataList) arrayData.get(position);
+
                 Intent intent = new Intent(MainActivity.this,Tram_detail.class);
+                intent.putExtra(Station, object.getMessage());
+                intent.putExtra(Station2, object.getStation());
                 startActivity(intent);
             }
         });
@@ -133,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void retriveData(Map<String, Object> value) {
-
+        if(arrayData.size()<=0){
         for (Map.Entry<String, Object> entry : value.entrySet())
         {
             Map singleUser = (Map) entry.getValue();
@@ -147,10 +152,15 @@ public class MainActivity extends AppCompatActivity {
             String blue = (String) singleUser.get("bluetime");
             String green = (String) singleUser.get("greentime");
 
-            arrayData.add(new DataList(nameUser,password,detail,lat,longitude,station,false,red,blue,green));
+
+            arrayData.add(new DataList(nameUser,password,detail,lat,longitude,station,red,blue,green));
         }
-        customArrayAdapter = new CustomArrayAdapter(MainActivity.this, 0, arrayData);
-        listView.setAdapter(customArrayAdapter);
+        }
+        if(arrayData.size()>0){
+            customArrayAdapter = new CustomArrayAdapter(this, 0, arrayData);
+            listView.setAdapter(customArrayAdapter);
+        }
+
     }
 
     @Override
@@ -166,5 +176,6 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(MainActivity.this,MapsActivity.class);
         startActivity(intent);
     }
+
 }
 

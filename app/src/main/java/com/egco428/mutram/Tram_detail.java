@@ -34,13 +34,15 @@ import java.util.Map;
 public class Tram_detail extends AppCompatActivity implements android.location.LocationListener {
     ListView listView;
     private DatabaseReference mDatabase;
-
+    String Station = MainActivity.Station;
+    String Station2 = MainActivity.Station2;
+    String Station3 = "stationsrc";
     protected LocationManager locationManager;
-    protected android.location.LocationListener locationListener;
 
-    Double Latitude;
-    Double Longitude;
-
+    Double Latitude = LoadScreen.latitudeknow;
+    Double Longitude =  LoadScreen.longitudeknow;
+    String name="";
+    String station="";
     List<DataList> arrayData = new ArrayList<>();
     List<DataList> arrayCal = MainActivity.arrayData;
     ArrayAdapter<DataList> customArrayAdapter;
@@ -49,30 +51,48 @@ public class Tram_detail extends AppCompatActivity implements android.location.L
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tram_detail);
-
-        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Intent intent = getIntent();
+        name = intent.getStringExtra("name");
+        station = intent.getStringExtra("station");
         listView = (ListView) findViewById(R.id.listView2);
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
         if (location != null) {
-            // Do something with the recent location fix
-            //  otherwise wait for the update below
+
+            Latitude= location.getLatitude();
+            Longitude= location.getLongitude();
+            calculateDistance();
+            Log.e("find Last know ","------------");
+
         } else {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+            calculateDistance();
+
+            Log.d("dont find Last know ","no get last know");
+
         }
 
-
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
+            Log.e("turn off gps ","or internet");
             return;
         }
 
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
+
+                DataList object = (DataList) arrayData.get(position);
+
+                Intent intent = new Intent(Tram_detail.this,TramMapsActivity.class);
+                intent.putExtra(Station, name);
+                intent.putExtra(Station2, station);
+                intent.putExtra(Station3, object.getStation());
+                Log.e("name dsc"+name,"station dsc"+station+"src"+object.getStation());
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -83,6 +103,7 @@ public class Tram_detail extends AppCompatActivity implements android.location.L
 
 
     private void calculateDistance() {
+        arrayData.clear();
         double minred=2000;
         double minblue=2000;
         double mingreen=2000;
@@ -90,89 +111,73 @@ public class Tram_detail extends AppCompatActivity implements android.location.L
         String stationblue="";
         String stationgreen="";
 
-        //get all tram line (red,green,blue) to find the nearest distance from the user's current location
         for(int i=0;i<arrayCal.size();i++){
             DataList object = (DataList)arrayCal.get(i);
             String station = object.getStation();
             Double longitu=Double.parseDouble(object.getLongitude());
             Double latitude=Double.parseDouble(object.getLat());
             Double distance = distance(Latitude,Longitude,latitude,longitu);
-            if((!object.getGreen().equals(""))&&(distance<mingreen)){
+            if((!object.getGreentime().equals("")||(!object.getBluetime().equals(null)))&&(distance<mingreen)){
 //                Log.v("min green disc ", distance + " and station " + station);
                 mingreen=distance;
                 stationgreen=station;
             }
-            if((!object.getRed().equals(""))&&(distance<minred)){
+            if((!object.getRedtime().equals("")||(!object.getBluetime().equals(null)))&&(distance<minred)){
 //                Log.v("min red disc ", distance + " and station " + station);
                 minred=distance;
                 stationred=station;
             }
-            if((!object.getBlue().equals(""))&&(distance<minblue)){
+            if((!object.getBluetime().equals("")||(!object.getBluetime().equals(null)))&&(distance<minblue)){
 //                Log.v("min blue disc ", distance + " and station " + station);
                 minblue=distance;
                 stationblue=station;
             }
+
         }
 
-        //add the tram line above to arraydata then set to list
+
         for(int i=0;i<arrayCal.size();i++){
             DataList object = (DataList)arrayCal.get(i);
-
             String station = object.getStation();
             if((stationgreen.equals(station))||(stationblue.equals(station))||(stationred.equals(station))) {
                 String title = object.getMessage();
                 String picname = object.getPicName();
                 String lat = object.getLat();
                 String longi = object.getLongitude();
-                String greentime = object.getGreen();
-                String redtime = object.getRed();
-                String bluetime = object.getBlue();
-
-//                if(arrayData.size()>0){
-//                    arrayData.clear();
-//                    CustomArrayAdapterTram adapter = (CustomArrayAdapterTram) listView.getAdapter();
-//                    adapter.clearData();
-//                }
-//                else {
-
-                    if (stationgreen.equals(station)) {
-                        Log.v("add best green station ", station + " end " + station);
-                        arrayData.add(new DataList(title, picname, "Green Tram", lat, longi, station, true, redtime, bluetime, greentime));
-                    }
-                    if (stationblue.equals(station)) {
-                        Log.v("add best blue station ", station + " end " + station);
-                        arrayData.add(new DataList(title, picname, "Blue Tram", lat, longi, station, true, redtime, bluetime, greentime));
-                    }
-                    if (stationred.equals(station)) {
-                        Log.v("add best red station ", station + " end " + station);
-                        arrayData.add(new DataList(title, picname, "Red Tram", lat, longi, station, true, redtime, bluetime, greentime));
-                    }
-                //}
+                String greentime = object.getGreentime();
+                String redtime = object.getRedtime();
+                String bluetime = object.getBluetime();
+                if (stationgreen.equals(station)) {
+                    Log.v("add best green station ", station + " end " + station);
+                    arrayData.add(new DataList(title, picname, "Green Tram", lat, longi, station, redtime, bluetime, greentime));
+                }
+                if (stationblue.equals(station)) {
+                    Log.v("add best blue station ", station + " end " + station);
+                    arrayData.add(new DataList(title, picname, "Blue Tram", lat, longi, station, redtime, bluetime, greentime));
+                }
+                if (stationred.equals(station)) {
+                    Log.v("add best red station ", station + " end " + station);
+                    arrayData.add(new DataList(title, picname, "Red Tram", lat, longi, station, redtime, bluetime, greentime));
+                }
             }
 
         }
         if (arrayData.size() > 0) {
             customArrayAdapter = new CustomArrayAdapterTram(this, 0, arrayData);
             listView.setAdapter(customArrayAdapter);
-            arrayCal.clear();
-//            CustomArrayAdapterTram adapter = (CustomArrayAdapterTram) listView.getAdapter();
-//            adapter.clearData();
-           // listView.setAdapter(null);
         }
     }
 
-    //calculate distance between user's current lat lon and tram stop's lat lon
     private double distance(double lat1, double lon1, double lat2, double lon2) {
-//        double theta = lon1 - lon2;
-//        double dist = Math.sin(deg2rad(lat1))
-//                * Math.sin(deg2rad(lat2))
-//                + Math.cos(deg2rad(lat1))
-//                * Math.cos(deg2rad(lat2))
-//                * Math.cos(deg2rad(theta));
-//        dist = Math.acos(dist);
-//        dist = rad2deg(dist);
-//        dist = dist * 60 * 1.1515;
-        double dist = Math.sqrt(Math.pow(lat1-lat2,2)+Math.pow(lon1-lon2,2));
+        double theta = lon1 - lon2;
+        double dist = Math.sin(deg2rad(lat1))
+                * Math.sin(deg2rad(lat2))
+                + Math.cos(deg2rad(lat1))
+                * Math.cos(deg2rad(lat2))
+                * Math.cos(deg2rad(theta));
+        dist = Math.acos(dist);
+        dist = rad2deg(dist);
+        dist = dist * 60 * 1.1515;
         return (dist);
     }
 
@@ -184,7 +189,7 @@ public class Tram_detail extends AppCompatActivity implements android.location.L
         return (rad * 180.0 / Math.PI);
     }
 
-    @Override   //get user's current location
+    @Override
     public void onLocationChanged(Location location) {
         if (location != null) {
 
@@ -201,7 +206,7 @@ public class Tram_detail extends AppCompatActivity implements android.location.L
                 // for ActivityCompat#requestPermissions for more details.
                 return;
             }
-            locationManager.removeUpdates(this); // for once time
+            locationManager.removeUpdates(this);
             calculateDistance();
         }
     }
@@ -214,12 +219,4 @@ public class Tram_detail extends AppCompatActivity implements android.location.L
 
     @Override
     public void onProviderDisabled(String provider) {}
-
-//    @Override
-//    protected void onDestroy() {
-//        super.onDestroy();
-//        arrayData.clear();
-//        listView.setAdapter(null);
-//    }
-
 }
