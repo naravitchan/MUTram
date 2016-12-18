@@ -117,12 +117,12 @@ public class Tram_detail extends AppCompatActivity implements android.location.L
             Double longitu=Double.parseDouble(object.getLongitude());
             Double latitude=Double.parseDouble(object.getLat());
             Double distance = distance(Latitude,Longitude,latitude,longitu);
-            if((!object.getGreentime().equals("")||(!object.getBluetime().equals(null)))&&(distance<mingreen)){
+            if((!object.getGreentime().equals("")||(!object.getGreentime().equals(null)))&&(distance<mingreen)){
 //                Log.v("min green disc ", distance + " and station " + station);
                 mingreen=distance;
                 stationgreen=station;
             }
-            if((!object.getRedtime().equals("")||(!object.getBluetime().equals(null)))&&(distance<minred)){
+            if((!object.getRedtime().equals("")||(!object.getRedtime().equals(null)))&&(distance<minred)){
 //                Log.v("min red disc ", distance + " and station " + station);
                 minred=distance;
                 stationred=station;

@@ -90,21 +90,21 @@ public class TramMapsActivity extends AppCompatActivity implements OnMapReadyCal
             return;
         }
 //        mMap.setMyLocationEnabled(true);
-
-        BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.mipmap.ic_launcher);
-        usermarker = mMap.addMarker(new MarkerOptions()
-                .position(new LatLng(latitude, longitu))
-                .icon(icon)
-                .title("User")
-                .snippet("content"));
+//
+//        BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.mipmap.ic_launcher);
+//        usermarker = mMap.addMarker(new MarkerOptions()
+//                .position(new LatLng(latitude, longitu))
+//                .icon(icon)
+//                .title("User")
+//                .snippet("content"));
         Marker markerdes = mMap.addMarker(new MarkerOptions()
                 .position(new LatLng(latitude2, longitu2))
-                .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_launcher))
+                .icon(BitmapDescriptorFactory.fromResource(R.mipmap.endpin))
                 .title("Destination Station")
                 .snippet("content"));
         Marker markersrc = mMap.addMarker(new MarkerOptions()
                 .position(new LatLng(latitude3, longitu3))
-                .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_launcher))
+                .icon(BitmapDescriptorFactory.fromResource(R.mipmap.startpin))
                 .title("Start Station")
                 .snippet("content"));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(now,18));
@@ -114,8 +114,8 @@ public class TramMapsActivity extends AppCompatActivity implements OnMapReadyCal
     @Override
     public void onLocationChanged(Location location) {
         if (location != null) {
-
-            usermarker.remove();
+            if(usermarker!=null){
+            usermarker.remove();}
             latitude=location.getLatitude();
             longitu=location.getLongitude();
             Log.v("Trammap--LocaChanged ", latitude + " and lo" + longitu);
