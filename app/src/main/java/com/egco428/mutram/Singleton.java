@@ -22,6 +22,7 @@ public class Singleton {
     }
 
     public void setList(List<DataList> value){
+
         this.arraydata.clear();
         this.arraydata.addAll(value);
     }

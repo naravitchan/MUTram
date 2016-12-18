@@ -39,11 +39,6 @@ public class MainActivity extends AppCompatActivity {
     private DatabaseReference mDatabase;
     public static List<DataList> arrayData = new ArrayList<>();
 
-
-
-    private String time="31-Oct-2016 5.30 p.m.";
-    public static final int DETAIL_REQ_CODE = 1001;
-
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -58,16 +53,12 @@ public class MainActivity extends AppCompatActivity {
 
         searchView.setOnSearchViewListener(new MaterialSearchView.SearchViewListener() {
             @Override
-            public void onSearchViewShown() {
-
-            }
+            public void onSearchViewShown() {}
 
             @Override
             public void onSearchViewClosed() {
-
                 //If closed Search View , lstView will return default
                 listView.setAdapter(customArrayAdapter);
-
             }
         });
 
@@ -113,14 +104,9 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // Getting Post failed, log a message
-
-                // ...
-            }
+            public void onCancelled(DatabaseError databaseError) {}
         };
         mDatabase.addValueEventListener(postListener);
-
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -143,7 +129,6 @@ public class MainActivity extends AppCompatActivity {
         {
             Map singleUser = (Map) entry.getValue();
             String nameUser = (String)singleUser.get("message");
-            String password = (String)singleUser.get("picName");
             String detail = (String)singleUser.get("detail");
             String lat = (String)singleUser.get("lat");
             String longitude = (String)singleUser.get("longitude");
@@ -153,14 +138,13 @@ public class MainActivity extends AppCompatActivity {
             String green = (String) singleUser.get("greentime");
 
 
-            arrayData.add(new DataList(nameUser,password,detail,lat,longitude,station,red,blue,green));
+            arrayData.add(new DataList(nameUser,detail,lat,longitude,station,red,blue,green));
         }
         }
         if(arrayData.size()>0){
             customArrayAdapter = new CustomArrayAdapter(this, 0, arrayData);
             listView.setAdapter(customArrayAdapter);
         }
-
     }
 
     @Override
@@ -171,11 +155,9 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-
     public void gotomap(View view) {
         Intent intent = new Intent(MainActivity.this,MapsActivity.class);
         startActivity(intent);
     }
-
 }
 

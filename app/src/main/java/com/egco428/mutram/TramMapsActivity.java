@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -35,15 +36,26 @@ public class TramMapsActivity extends AppCompatActivity implements OnMapReadyCal
     Double latitude2; //destination
     Double longitu3; //src
     Double latitude3; //src
+
+    TextView dis;
+    TextView time;
+    TextView des;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tram_maps);
+
         Intent intent = getIntent();
         String name = intent.getStringExtra("name"); //destination name
         String stationdsc = intent.getStringExtra("station"); //station number
         String stationsrc = intent.getStringExtra("stationsrc");
         List<DataList> arrayData = MainActivity.arrayData;
+
+        dis = (TextView)findViewById(R.id.textView);
+        time = (TextView)findViewById(R.id.textView2);
+        des = (TextView)findViewById(R.id.textView3);
+
         for(int i=0;i<arrayData.size();i++){
             DataList object = (DataList)arrayData.get(i);
             String station = object.getStation();
