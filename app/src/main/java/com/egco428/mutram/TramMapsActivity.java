@@ -9,7 +9,9 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -51,8 +53,10 @@ public class TramMapsActivity extends AppCompatActivity implements OnMapReadyCal
         String stationdsc = intent.getStringExtra("station"); //station number
         String stationsrc = intent.getStringExtra("stationsrc");
         String namesrc = intent.getStringExtra("namesrc");
-        String timesrc = intent.getStringExtra("time");
+        String timesrc;
+        timesrc=namesrc.substring(namesrc.length() - 14);
         namesrc = namesrc.substring(0, namesrc.length() - 15);
+
         List<DataList> arrayData = MainActivity.arrayData;
 
         dis = (TextView) findViewById(R.id.textView);
