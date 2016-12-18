@@ -52,9 +52,9 @@ public class TramMapsActivity extends AppCompatActivity implements OnMapReadyCal
         String stationdsc = intent.getStringExtra("station"); //station number
         String stationsrc = intent.getStringExtra("stationsrc");
         List<DataList> arrayData = MainActivity.arrayData;
-        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
+//        setSupportActionBar(toolbar);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         dis = (TextView)findViewById(R.id.textView);
         time = (TextView)findViewById(R.id.textView2);

@@ -55,7 +55,7 @@ public class Tram_detail extends AppCompatActivity implements android.location.L
         name = intent.getStringExtra("name");
         station = intent.getStringExtra("station");
         listView = (ListView) findViewById(R.id.listView2);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
