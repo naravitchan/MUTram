@@ -8,7 +8,9 @@ import android.location.LocationManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -38,19 +40,18 @@ public class Tram_detail extends AppCompatActivity implements android.location.L
 
     Double Latitude;
     Double Longitude;
-    String lat;
-    String longitude_main;
-    String name_loc;
-    Location location;
 
     List<DataList> arrayData = new ArrayList<>();
-    List<DataList> arrayCal = new ArrayList<>();
+    List<DataList> arrayCal = MainActivity.arrayData;
     ArrayAdapter<DataList> customArrayAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tram_detail);
+
+        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         listView = (ListView) findViewById(R.id.listView2);
 
@@ -64,52 +65,22 @@ public class Tram_detail extends AppCompatActivity implements android.location.L
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
         }
 
-        //get values for calculate
-        Intent intent = getIntent();
-        lat = intent.getStringExtra(MainActivity.Latitude);
-        longitude_main = intent.getStringExtra(MainActivity.Longitude);
-        name_loc = intent.getStringExtra(MainActivity.Station);
 
-        mDatabase = FirebaseDatabase.getInstance().getReference("Location");
-        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                retriveData((Map<String, Object>) dataSnapshot.getValue());
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-        });
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
             return;
         }
-        calculateDistance();
 
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
     }
 
-
-    private void retriveData(Map<String, Object> value) {
-
-        for (Map.Entry<String, Object> entry : value.entrySet()) {
-            Map singleUser = (Map) entry.getValue();
-            String title = (String) singleUser.get("message");
-            String picname = (String) singleUser.get("picName");
-            String detail = (String) singleUser.get("detail");
-            String lat = (String) singleUser.get("lat");
-            String longitude = (String) singleUser.get("longitude");
-            String station = (String) singleUser.get("station");
-            String red = (String) singleUser.get("redtime");
-            String blue = (String) singleUser.get("bluetime");
-            String green = (String) singleUser.get("greentime");
-
-            arrayCal.add(new DataList(title, picname, detail, lat, longitude, station, true,red,blue,green));
-        }
-
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        finish();
+        return true;
     }
+
 
     private void calculateDistance() {
         double minred=2000;
@@ -119,83 +90,89 @@ public class Tram_detail extends AppCompatActivity implements android.location.L
         String stationblue="";
         String stationgreen="";
 
+        //get all tram line (red,green,blue) to find the nearest distance from the user's current location
         for(int i=0;i<arrayCal.size();i++){
             DataList object = (DataList)arrayCal.get(i);
-            String lat = object.getLat();
-            String longi = object.getLongitude();
             String station = object.getStation();
-            String greentime = object.getGreen();
-            String redtime = object.getRed();
-            String bluetime = object.getBlue();
-            Double longitu=Double.parseDouble(longi);
-            Double latitude=Double.parseDouble(lat);
+            Double longitu=Double.parseDouble(object.getLongitude());
+            Double latitude=Double.parseDouble(object.getLat());
             Double distance = distance(Latitude,Longitude,latitude,longitu);
-            if((!greentime.equals(""))&&(distance<mingreen)){
-                Log.v("min green disc ", distance + " and station " + station);
+            if((!object.getGreen().equals(""))&&(distance<mingreen)){
+//                Log.v("min green disc ", distance + " and station " + station);
                 mingreen=distance;
                 stationgreen=station;
             }
-            if((!redtime.equals(""))&&(distance<minred)){
-                Log.v("min red disc ", distance + " and station " + station);
+            if((!object.getRed().equals(""))&&(distance<minred)){
+//                Log.v("min red disc ", distance + " and station " + station);
                 minred=distance;
                 stationred=station;
             }
-            if((!bluetime.equals(""))&&(distance<minblue)){
-                Log.v("min blue disc ", distance + " and station " + station);
+            if((!object.getBlue().equals(""))&&(distance<minblue)){
+//                Log.v("min blue disc ", distance + " and station " + station);
                 minblue=distance;
                 stationblue=station;
             }
-
-
         }
-//        Log.v("Total","---");
-//        minblue=minblue*1609.34;
-//        mingreen=mingreen*1609.34;
-//        minred=minred*1609.34;
-//        Log.e("min green disc ", stationgreen + " distance " + mingreen);
-//        Log.e("min red disc ", stationred + " distance " + minred);
-//        Log.e("min blue disc ", stationblue + " distance " + minblue);
+
+        //add the tram line above to arraydata then set to list
         for(int i=0;i<arrayCal.size();i++){
             DataList object = (DataList)arrayCal.get(i);
-            String title=object.getMessage();
-            String picname=object.getPicName();
-            String lat = object.getLat();
-            String longi = object.getLongitude();
-            String station = object.getStation();
-            String greentime = object.getGreen();
-            String redtime = object.getRed();
-            String bluetime = object.getBlue();
-            if(stationgreen.equals(station)){
-                Log.v("add best green station ", station + " end " + station);
-                arrayData.add(new DataList(title, picname, "Green Tram", lat, longi, station, true,redtime,bluetime,greentime));
-            }
-            if(stationblue.equals(station)){
-                Log.v("add best blue station ", station + " end " + station);
-                arrayData.add(new DataList(title, picname, "Blue Tram", lat, longi, station, true,redtime,bluetime,greentime));
-            }
-            if(stationred.equals(station)){
-                Log.v("add best red station ", station + " end " + station);
-                arrayData.add(new DataList(title, picname, "Red Tram", lat, longi, station, true,redtime,bluetime,greentime));
-            }
 
+            String station = object.getStation();
+            if((stationgreen.equals(station))||(stationblue.equals(station))||(stationred.equals(station))) {
+                String title = object.getMessage();
+                String picname = object.getPicName();
+                String lat = object.getLat();
+                String longi = object.getLongitude();
+                String greentime = object.getGreen();
+                String redtime = object.getRed();
+                String bluetime = object.getBlue();
+
+//                if(arrayData.size()>0){
+//                    arrayData.clear();
+//                    CustomArrayAdapterTram adapter = (CustomArrayAdapterTram) listView.getAdapter();
+//                    adapter.clearData();
+//                }
+//                else {
+
+                    if (stationgreen.equals(station)) {
+                        Log.v("add best green station ", station + " end " + station);
+                        arrayData.add(new DataList(title, picname, "Green Tram", lat, longi, station, true, redtime, bluetime, greentime));
+                    }
+                    if (stationblue.equals(station)) {
+                        Log.v("add best blue station ", station + " end " + station);
+                        arrayData.add(new DataList(title, picname, "Blue Tram", lat, longi, station, true, redtime, bluetime, greentime));
+                    }
+                    if (stationred.equals(station)) {
+                        Log.v("add best red station ", station + " end " + station);
+                        arrayData.add(new DataList(title, picname, "Red Tram", lat, longi, station, true, redtime, bluetime, greentime));
+                    }
+                //}
+            }
 
         }
         if (arrayData.size() > 0) {
             customArrayAdapter = new CustomArrayAdapterTram(this, 0, arrayData);
             listView.setAdapter(customArrayAdapter);
+            arrayCal.clear();
+//            CustomArrayAdapterTram adapter = (CustomArrayAdapterTram) listView.getAdapter();
+//            adapter.clearData();
+           // listView.setAdapter(null);
         }
     }
 
+    //calculate distance between user's current lat lon and tram stop's lat lon
     private double distance(double lat1, double lon1, double lat2, double lon2) {
-        double theta = lon1 - lon2;
-        double dist = Math.sin(deg2rad(lat1))
-                * Math.sin(deg2rad(lat2))
-                + Math.cos(deg2rad(lat1))
-                * Math.cos(deg2rad(lat2))
-                * Math.cos(deg2rad(theta));
-        dist = Math.acos(dist);
-        dist = rad2deg(dist);
-        dist = dist * 60 * 1.1515;
+//        double theta = lon1 - lon2;
+//        double dist = Math.sin(deg2rad(lat1))
+//                * Math.sin(deg2rad(lat2))
+//                + Math.cos(deg2rad(lat1))
+//                * Math.cos(deg2rad(lat2))
+//                * Math.cos(deg2rad(theta));
+//        dist = Math.acos(dist);
+//        dist = rad2deg(dist);
+//        dist = dist * 60 * 1.1515;
+        double dist = Math.sqrt(Math.pow(lat1-lat2,2)+Math.pow(lon1-lon2,2));
         return (dist);
     }
 
@@ -207,7 +184,7 @@ public class Tram_detail extends AppCompatActivity implements android.location.L
         return (rad * 180.0 / Math.PI);
     }
 
-    @Override
+    @Override   //get user's current location
     public void onLocationChanged(Location location) {
         if (location != null) {
 
@@ -224,9 +201,8 @@ public class Tram_detail extends AppCompatActivity implements android.location.L
                 // for ActivityCompat#requestPermissions for more details.
                 return;
             }
-            locationManager.removeUpdates(this);
+            locationManager.removeUpdates(this); // for once time
             calculateDistance();
-
         }
     }
 
@@ -238,4 +214,12 @@ public class Tram_detail extends AppCompatActivity implements android.location.L
 
     @Override
     public void onProviderDisabled(String provider) {}
+
+//    @Override
+//    protected void onDestroy() {
+//        super.onDestroy();
+//        arrayData.clear();
+//        listView.setAdapter(null);
+//    }
+
 }

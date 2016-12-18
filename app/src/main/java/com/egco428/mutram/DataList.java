@@ -2,10 +2,12 @@ package com.egco428.mutram;
 
 import android.widget.Button;
 
+import java.io.Serializable;
+
 /*
  * Created by Benz on 10/31/2016.
  */
-public class DataList {
+public class DataList  {
     private String pic;
     private String message;
     private String detail;
