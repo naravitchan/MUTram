@@ -21,12 +21,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.google.android.gms.fitness.data.DataPoint;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.*;
+import com.google.android.gms.maps.model.Polyline;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -62,11 +63,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
-
-
     }
-
-
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -76,34 +73,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         LatLng sydney = new LatLng(-34, 151);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-
     }
-
-
 
     @Override
     public void onLocationChanged(Location location) {
-        //location.getLatitude()
-        //location.getLongitude()
-        lblLat.setText("" + location.getLatitude()); //Latitude :
-        lblLon.setText("" + location.getLongitude()); //Longitude :
+
+        lblLat.setText("" + location.getLatitude()); //get current Latitude :
+        lblLon.setText("" + location.getLongitude()); //get current Longitude :
         Log.e("LatLon","Latitude : " + location.getLatitude()+"Longitude : " + location.getLongitude());
     }
 
     @Override
-    public void onProviderDisabled(String provider) {
-        // Log.d("Latitude","disable");
-    }
+    public void onProviderDisabled(String provider) {}
 
     @Override
-    public void onProviderEnabled(String provider) {
-        // Log.d("Latitude","enable");
-    }
+    public void onProviderEnabled(String provider) {}
 
     @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-        // Log.d("Latitude","status");
-    }
+    public void onStatusChanged(String provider, int status, Bundle extras) {}
 
     public void AddLaLo(View view) {
         String lat= lblLat.getText().toString();
@@ -112,10 +99,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         String detailLoc = detail.getText().toString();
         String stationLoc = station.getText().toString();
 
-
         DatabaseReference ref = database.getReference("Location");
-        ref.push().setValue(new DataList(nameLoc,"pic0",detailLoc,lat,longi,stationLoc,"","",""));
+        ref.push().setValue(new DataList(nameLoc,detailLoc,lat,longi,stationLoc,"","",""));
+        ref.child("redline").push().setValue(new DataPolyline("11","12"));
+        ref.child("blueline").push().setValue(new DataPolyline("11","12"));
+        ref.child("greenline").push().setValue(new DataPolyline("11","12"));
         Toast.makeText(this,"added to firebase already",Toast.LENGTH_SHORT).show();
     }
-
 }

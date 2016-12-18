@@ -25,7 +25,9 @@ public class CustomArrayAdapterTram extends ArrayAdapter<DataList>{
         this.objects = objects;
     }
 
-
+    public void clearData(){
+        objects.clear();
+    }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {

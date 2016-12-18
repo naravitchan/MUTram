@@ -18,6 +18,14 @@
             android:layout_height="193dp">
 
             <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="destination"
+                android:id="@+id/textView3"
+                android:layout_gravity="right"
+                android:layout_weight="0.53" />
+
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:text="Lat"
@@ -53,5 +61,21 @@
         android:id="@+id/imageButton"
         android:layout_gravity="right|bottom"
         android:src="@drawable/getloca" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="tram arrival"
+        android:id="@+id/textView"
+        android:layout_weight="0.53"
+        android:layout_gravity="left|top" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="total time"
+        android:id="@+id/textView2"
+        android:layout_gravity="center_horizontal|top"
+        android:layout_weight="0.53" />
 
 </FrameLayout>
