@@ -21,9 +21,10 @@ public class LoadScreen extends AppCompatActivity implements android.location.Lo
     Handler handler;
     Runnable runnable;
     long delay_time;
-    long time = 1000L;                                          //delay
-    public static Double latitudeknow = 0.0000000;
-    public static Double longitudeknow = 0.0000000;
+    long time = 3000L;                                      //delay screen
+
+    public static Double latitudeknow = 0.000000;           //get LatLng to use for LatLnglastknow
+    public static Double longitudeknow = 0.000000;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,7 +37,7 @@ public class LoadScreen extends AppCompatActivity implements android.location.Lo
 
             return;
         }
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);               //location
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
 
         handler = new Handler();
