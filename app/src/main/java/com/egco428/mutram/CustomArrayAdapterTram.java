@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * Created by seagame on 13/12/2559.
  */
-public class CustomArrayAdapterTram extends ArrayAdapter<DataList>{
+public class CustomArrayAdapterTram extends ArrayAdapter<DataList>{         //for page tram_detail
     Context context;
     List<DataList> objects;
 
@@ -41,7 +41,7 @@ public class CustomArrayAdapterTram extends ArrayAdapter<DataList>{
         txt.setText(dataList.getDetail());
         time.setText(dataList.getMessage());
 
-        if(txt.getText().equals("Red Tram")){
+        if(txt.getText().equals("Red Tram")){                               //set color for each line
             view.setBackgroundResource(R.color.red);
         }
         else if(txt.getText().equals("Blue Tram")){

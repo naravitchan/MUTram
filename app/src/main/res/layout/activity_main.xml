@@ -36,15 +36,6 @@
         android:dividerHeight="1dp"
         android:background="#ffe6ff"
         android:layout_below="@+id/toolbar"
-        android:layout_alignParentStart="true"
-        android:layout_above="@+id/button" />
+        android:layout_alignParentStart="true" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="get positions"
-        android:id="@+id/button"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:onClick="gotomap" />
 </RelativeLayout>

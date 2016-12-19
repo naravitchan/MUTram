@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * Created by seagame on 13/12/2559.
  */
-public class CustomArrayAdapter extends ArrayAdapter<DataList>{
+public class CustomArrayAdapter extends ArrayAdapter<DataList>{         //for MainActivity
     Context context;
     List<DataList> objects;
 

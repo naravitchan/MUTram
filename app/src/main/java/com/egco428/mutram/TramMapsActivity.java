@@ -54,7 +54,7 @@ public class TramMapsActivity extends AppCompatActivity implements OnMapReadyCal
         String stationsrc = intent.getStringExtra("stationsrc");
         String namesrc = intent.getStringExtra("namesrc");
         String timesrc;
-        timesrc=namesrc.substring(namesrc.length() - 14);
+        timesrc=namesrc.substring(namesrc.length() - 14);           //get from tram_detail and substing to get time
         namesrc = namesrc.substring(0, namesrc.length() - 15);
 
         List<DataList> arrayData = MainActivity.arrayData;
@@ -115,7 +115,7 @@ public class TramMapsActivity extends AppCompatActivity implements OnMapReadyCal
 //
         BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.mipmap.human);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(now, 18));
-        usermarker = mMap.addMarker(new MarkerOptions()
+        usermarker = mMap.addMarker(new MarkerOptions()             //set 3 marker : user,destination,source
                 .position(new LatLng(latitude, longitu))
                 .icon(icon)
                 .title("User")
@@ -134,8 +134,8 @@ public class TramMapsActivity extends AppCompatActivity implements OnMapReadyCal
     }
 
     @Override
-    public void onLocationChanged(Location location) {        if (location != null) {
-
+    public void onLocationChanged(Location location) {
+        if (location != null) {                                 //if location change update marker by remove old and add new marker
             if (usermarker != null) {
                 usermarker.remove();
             }
@@ -179,7 +179,7 @@ public class TramMapsActivity extends AppCompatActivity implements OnMapReadyCal
     }
 
     public void movecam(View view) {
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitu), 18));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitu), 18));              //button move camera to user marker
     }
 
     @Override

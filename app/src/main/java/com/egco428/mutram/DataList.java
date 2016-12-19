@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Created by Benz on 10/31/2016.
  */
 public class DataList  {
-    private String message;
+    private String message;     //title
     private String detail;
     private String lat;
     private String longitude;

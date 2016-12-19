@@ -45,24 +45,23 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         listView= (ListView) findViewById(R.id.listView);
 
-        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);          //set search toolbar
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Location Search");
         toolbar.setTitleTextColor(Color.parseColor("#FFFFFF"));
         searchView = (MaterialSearchView)findViewById(R.id.search_view);
 
-        searchView.setOnSearchViewListener(new MaterialSearchView.SearchViewListener() {
+        searchView.setOnSearchViewListener(new MaterialSearchView.SearchViewListener() { // function search
             @Override
             public void onSearchViewShown() {}
 
             @Override
-            public void onSearchViewClosed() {
-                //If closed Search View , lstView will return default
+            public void onSearchViewClosed() {                  //If closed Search View , lstView will return default
                 listView.setAdapter(customArrayAdapter);
             }
         });
 
-        searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
+        searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {   //onsearchlistenner
             @Override
             public boolean onQueryTextSubmit(String query) {
                 return false;
@@ -70,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                if(newText != null && !newText.isEmpty()){
+                if(newText != null && !newText.isEmpty()){                      //text not null ->search
                     List<DataList> arrayDataSearch = new ArrayList<>();
                     for(int i=0;i<arrayData.size();i++){
                         DataList object = (DataList)arrayData.get(i);
@@ -83,12 +82,12 @@ public class MainActivity extends AppCompatActivity {
                         }
 
                     }
-                    customArrayAdapter = new CustomArrayAdapter(MainActivity.this, 0, arrayDataSearch);
+                    customArrayAdapter = new CustomArrayAdapter(MainActivity.this, 0, arrayDataSearch);        //search result
                     listView.setAdapter(customArrayAdapter);
                 }
                 else{
-                    //if search text is null
-                    //return default
+                                                        //if search text is null
+                                                        //return default
                     customArrayAdapter = new CustomArrayAdapter(MainActivity.this, 0, arrayData);
                     listView.setAdapter(customArrayAdapter);
                 }
@@ -96,7 +95,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        mDatabase = FirebaseDatabase.getInstance().getReference("Location");
+        mDatabase = FirebaseDatabase.getInstance().getReference("Location");            //set database
+
         ValueEventListener postListener = new ValueEventListener()  {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
         };
         mDatabase.addValueEventListener(postListener);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {         //listview click
             @Override
             public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
 
@@ -117,13 +117,13 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this,Tram_detail.class);
                 intent.putExtra(Station, object.getMessage());
                 intent.putExtra(Station2, object.getStation());
-                startActivity(intent);
+                startActivity(intent);                                              //go to tram_detail &&put Intent
             }
         });
 
     }
 
-    private void retriveData(Map<String, Object> value) {
+    private void retriveData(Map<String, Object> value) {                   //get data from firebase
         if(arrayData.size()<=0){
         for (Map.Entry<String, Object> entry : value.entrySet())
         {
@@ -138,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
             String green = (String) singleUser.get("greentime");
 
 
-            arrayData.add(new DataList(nameUser,detail,lat,longitude,station,red,blue,green));
+            arrayData.add(new DataList(nameUser,detail,lat,longitude,station,red,blue,green));      //add data object to arraylist
         }
         }
         if(arrayData.size()>0){
@@ -155,9 +155,5 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    public void gotomap(View view) {
-        Intent intent = new Intent(MainActivity.this,MapsActivity.class);
-        startActivity(intent);
-    }
 }
 
