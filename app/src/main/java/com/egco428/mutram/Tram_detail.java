@@ -58,7 +58,7 @@ public class Tram_detail extends AppCompatActivity implements android.location.L
     String stationblue="";
     String stationgreen="";
 
-    double minred=2000,minblue=2000,mingreen=2000;         //var for distance calculate
+    double minred=999999999999,minblue=999999999999,mingreen=999999999999;         //var for distance calculate
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
